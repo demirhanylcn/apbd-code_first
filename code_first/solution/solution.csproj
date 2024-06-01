@@ -18,10 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Exception\" />
       <Folder Include="Migrations\" />
-      <Folder Include="Repository\" />
-      <Folder Include="Service\" />
     </ItemGroup>
 
     <ItemGroup>
