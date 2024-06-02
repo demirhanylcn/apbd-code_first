@@ -38,19 +38,6 @@ public class PrescriptionRepository : IPrescriptionRepository
     }
 
 
-    public async Task<bool> CheckDoctorExist([FromBody] AddPrescriptionDTO addPrescriptionDto)
-    {
-        var doctor =
-            await _appDbContext.Doctors.FirstOrDefaultAsync(d => d.IdDoctor == addPrescriptionDto.DoctorId);
-        if (doctor == null) throw new DoctorDoesntExistsException(addPrescriptionDto.DoctorId);
-        return true;
-    }
-
-    public async Task<bool> CheckPatientExist([FromBody] AddPrescriptionDTO addPrescriptionDto)
-    {
-        var patient =
-            await _appDbContext.Patients.FirstOrDefaultAsync(p => p.IdPatient == addPrescriptionDto.PatientId);
-        if (patient == null) return false;
-        return true;
-    }
+    
+    
 }
