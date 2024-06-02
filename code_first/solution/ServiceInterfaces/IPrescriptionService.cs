@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using solution.DTOs;
 
-namespace solution.Repository;
+namespace solution.Service;
 
-public interface IPrescriptionRepository
+public interface IPrescriptionService
 {
     public Task<int> AddPrescription([FromBody] AddPrescriptionDTO addPrescriptionDto);
+    public void CheckDueDate([FromBody] AddPrescriptionDTO addPrescriptionDto);
+
 
 }

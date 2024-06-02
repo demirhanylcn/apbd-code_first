@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using solution.DTOs;
 using solution.Exception;
-using solution.Models;
-using solution.Repository;
+using solution.Interface;
 using solution.Service;
 
 namespace solution.Controller;
@@ -14,17 +13,37 @@ public class HospitalController : ControllerBase
 {
 
     public IPrescriptionService _PrescriptionService;
+    public IDoctorService _DoctorService;
+    public IMedicamentService _MedicamentService;
+    public IPrescriptionMedicamentService _PrescriptionMedicamentService;
+    public IPatientService _PatientService;
+    
 
-    public HospitalController(IPrescriptionService prescriptionService)
+    public HospitalController(IPrescriptionService prescriptionService,
+        IPatientService patientService,
+        IMedicamentService medicamentService,
+        IDoctorService doctorService,
+        IPrescriptionMedicamentService prescriptionMedicamentService)
     {
         _PrescriptionService = prescriptionService;
+        _MedicamentService = medicamentService;
+        _DoctorService = doctorService;
+        _PrescriptionMedicamentService = prescriptionMedicamentService;
+        _PatientService = patientService;
     }
     [HttpPost]
-    public IActionResult getPrescription([FromBody] AddPrescriptionDTO addPrescriptionDto)
+    public async Task<IActionResult> getPrescription([FromBody] AddPrescriptionDTO addPrescriptionDto)
     {
         try
         {
-            return Ok(addPrescriptionDto.MedicationIds);
+            var patientExists = await _PatientService.CheckPatientExist(addPrescriptionDto);
+            if (patientExists!) await _PatientService.InsertNewPatient(addPrescriptionDto);
+             _MedicamentService.CheckMedicamentExists(addPrescriptionDto);
+             _MedicamentService.CheckMedicamentLowerThan10(addPrescriptionDto);
+             _PrescriptionService.CheckDueDate(addPrescriptionDto);
+            var prescriptionId = await _PrescriptionService.AddPrescription(addPrescriptionDto);
+             var result = await _PrescriptionMedicamentService.CompletePrescriptionInsert(addPrescriptionDto, prescriptionId);
+            return Ok(result);
         }
         catch (DoctorDoesntExistsException ex)
         {

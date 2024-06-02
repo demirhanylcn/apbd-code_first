@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using solution.DTOs;
+using solution.Exception;
 using solution.Repository;
 
 namespace solution.Service;
@@ -12,8 +13,17 @@ public class PrescriptionService : IPrescriptionService
     {
         _PrescriptionRepository = prescriptionRepository;
     }
-    public Task<int> AddPrescription([FromBody] AddPrescriptionDTO addPrescriptionDto)
+    public async Task<int> AddPrescription([FromBody] AddPrescriptionDTO addPrescriptionDto)
     {
-        
+        var result = await _PrescriptionRepository.AddPrescription(addPrescriptionDto);
+        return result;
+    }
+
+    public void CheckDueDate([FromBody] AddPrescriptionDTO addPrescriptionDto)
+    {
+        var dueDate = addPrescriptionDto.PrescriptionDueDate;
+        var date = addPrescriptionDto.PrescriptionDate;
+        var result = dueDate >= date;
+        if (result!) throw new DueDateSmallerThanDateException(dueDate,date);
     }
 }

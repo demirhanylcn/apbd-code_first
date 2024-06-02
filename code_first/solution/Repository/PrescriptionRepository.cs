@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using solution.DTOs;
-using solution.Exception;
 using solution.Models;
 
 namespace solution.Repository;
@@ -21,20 +20,21 @@ public class PrescriptionRepository : IPrescriptionRepository
         var doctor =
             await _appDbContext.Doctors.FirstOrDefaultAsync(d => d.IdDoctor == addPrescriptionDto.DoctorId);
         var patient =
-            await _appDbContext.Patients.FirstOrDefaultAsync(p => p.IdPatient == addPrescriptionDto.PatientId);
-       await _appDbContext.Prescriptions.AddAsync(new Prescription
-        {
-            Date = addPrescriptionDto.PrescriptionDate,
-            DoctorId = addPrescriptionDto.DoctorId,
-            Doctor = doctor,
-            DueDate = addPrescriptionDto.PrescriptionDueDate,
-            PrescriptionId = addPrescriptionDto.PrescriptionId,
-            Patient = patient,
-            PatientId = addPrescriptionDto.PatientId,
-            Prescription_Medicaments = new List<Prescription_Medicament>()
-        });
-        var result = _appDbContext.SaveChanges();
-        return result;
+            await _appDbContext.Patients.FirstOrDefaultAsync(p => p.IdPatient == addPrescriptionDto.Patient.IdPatient);
+        var prescription =
+            new Prescription
+            {
+                Date = addPrescriptionDto.PrescriptionDate,
+                DoctorId = addPrescriptionDto.DoctorId,
+                Doctor = doctor,
+                DueDate = addPrescriptionDto.PrescriptionDueDate,
+                Patient = patient,
+                PatientId = addPrescriptionDto.Patient.IdPatient,
+                Prescription_Medicaments = new List<Prescription_Medicament>()
+            };
+       await _appDbContext.Prescriptions.AddAsync(prescription);
+       await _appDbContext.SaveChangesAsync();
+       return prescription.PrescriptionId;
     }
 
 

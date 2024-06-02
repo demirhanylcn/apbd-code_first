@@ -14,24 +14,24 @@ public class PrescriptionMedicamentRepository : IPrescriptionMedicamentRepositor
     }
 
 
-    public async Task<int> AddRecord(PrescriptionMedicamentDTO prescriptionMedicamentDto)
+    public async Task<int> CompletePrescriptionInsert(MedicamentDTO medicamentDto, int prescriptionId)
     {
 
         var medicament =
             await _appDbConext.Medicaments.FirstOrDefaultAsync(m =>
-                m.IdMedicament == prescriptionMedicamentDto.MedicamentId);
+                m.IdMedicament == medicamentDto.IdMedicament);
         var prescription =
             await _appDbConext.Prescriptions
-                .FirstOrDefaultAsync(p => p.PrescriptionId == prescriptionMedicamentDto.PrescriptionId);
+                .FirstOrDefaultAsync(p => p.PrescriptionId == prescriptionId);
         await _appDbConext.PrescriptionMedicaments
             .AddAsync(new Prescription_Medicament
             {
-                Details = prescriptionMedicamentDto.Details,
+                Details = medicamentDto.Description,
                 Medicament = medicament,
-                Dose = prescriptionMedicamentDto.Dose,
-                MedicamentId = prescriptionMedicamentDto.MedicamentId,
+                Dose = medicamentDto.Dose,
+                MedicamentId = medicamentDto.IdMedicament,
                 Prescription = prescription,
-                PrescriptionId = prescriptionMedicamentDto.PrescriptionId
+                PrescriptionId = prescriptionId
             });
 
         var result = await _appDbConext.SaveChangesAsync();
