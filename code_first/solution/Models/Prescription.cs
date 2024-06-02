@@ -6,7 +6,7 @@ namespace solution.Models;
 
 public class Prescription
 {
-    public int Id { get; set; }
+    public int PrescriptionId { get; set; }
     public DateTime Date { get; set; }
     public DateTime DueDate { get; set; }
     

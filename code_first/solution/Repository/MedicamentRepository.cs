@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using solution.Exception;
 
 namespace solution.Repository;
 
@@ -15,5 +16,6 @@ public class MedicamentRepository : IMedicamentRepository
     {
         var medicament = await _appDbContext.Medicaments.FirstOrDefaultAsync(m => m.IdMedicament == medicamentId);
         if (medicament == null) throw new MedicamentDoesntExistsException(medicamentId);
+        return true;
     }
 }

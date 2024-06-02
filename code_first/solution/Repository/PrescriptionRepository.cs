@@ -28,7 +28,7 @@ public class PrescriptionRepository : IPrescriptionRepository
             DoctorId = addPrescriptionDto.DoctorId,
             Doctor = doctor,
             DueDate = addPrescriptionDto.PrescriptionDueDate,
-            Id = addPrescriptionDto.PrescriptionId,
+            PrescriptionId = addPrescriptionDto.PrescriptionId,
             Patient = patient,
             PatientId = addPrescriptionDto.PatientId,
             Prescription_Medicaments = new List<Prescription_Medicament>()
