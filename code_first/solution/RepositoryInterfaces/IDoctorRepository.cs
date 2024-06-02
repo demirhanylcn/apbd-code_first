@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using solution.DTOs;
 
-namespace solution.Repository;
+namespace solution.RepositoryInterfaces;
 
 public interface IDoctorRepository
 {

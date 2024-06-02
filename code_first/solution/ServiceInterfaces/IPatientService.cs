@@ -8,7 +8,7 @@ public interface IPatientService
     public  Task<int> InsertNewPatient([FromBody] AddPrescriptionDTO addPrescriptionDto);
 
     public Task<bool> CheckPatientExist(int patientId);
-    public Task<PatientDTO> GetPatientInformation(int patientId);
+    public Task<GetPatientDTO> GetPatientInformation(int patientId);
 
 
 }

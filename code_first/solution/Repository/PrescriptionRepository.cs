@@ -9,19 +9,19 @@ namespace solution.Repository;
 public class PrescriptionRepository : IPrescriptionRepository
 {
 
-    public readonly AppDbContext _appDbContext;
+    public readonly AppDbContext AppDbContext;
     public PrescriptionRepository(AppDbContext appDbContext)
     {
-        _appDbContext = appDbContext;
+        AppDbContext = appDbContext;
     }
 
     public async Task<int> AddPrescription([FromBody] AddPrescriptionDTO addPrescriptionDto)
     {
 
         var doctor =
-            await _appDbContext.Doctors.FirstOrDefaultAsync(d => d.IdDoctor == addPrescriptionDto.DoctorId);
+            await AppDbContext.Doctors.FirstOrDefaultAsync(d => d.IdDoctor == addPrescriptionDto.DoctorId);
         var patient =
-            await _appDbContext.Patients.FirstOrDefaultAsync(p => p.IdPatient == addPrescriptionDto.Patient.IdPatient);
+            await AppDbContext.Patients.FirstOrDefaultAsync(p => p.IdPatient == addPrescriptionDto.Patient.IdPatient);
         var prescription =
             new Prescription
             {
@@ -31,27 +31,13 @@ public class PrescriptionRepository : IPrescriptionRepository
                 DueDate = addPrescriptionDto.PrescriptionDueDate,
                 Patient = patient,
                 PatientId = addPrescriptionDto.Patient.IdPatient,
-                Prescription_Medicaments = new List<Prescription_Medicament>()
+                Prescription_Medicaments = new List<PrescriptionMedicament>()
             };
-       await _appDbContext.Prescriptions.AddAsync(prescription);
-       await _appDbContext.SaveChangesAsync();
-       return prescription.PrescriptionId;
+       await AppDbContext.Prescriptions.AddAsync(prescription);
+       await AppDbContext.SaveChangesAsync();
+       return prescription.Id;
     }
-
-
-    public  List<PrescriptionDTO> GetPrescriptions(int patientId)
-    {
-        var query = _appDbContext.Prescriptions.Include(e => e.PatientId == patientId).ToList();
-        var result = query.Select(e => new PrescriptionDTO
-        {
-            Date = e.Date,
-            DueDate = e.DueDate,
-            PrescriptionId = e.PrescriptionId
-        }).ToList();
-
-        return result;
-    }
-
+    
     
     
 }

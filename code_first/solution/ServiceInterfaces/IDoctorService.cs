@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using solution.DTOs;
 
-namespace solution.Interface;
+namespace solution.ServiceInterfaces;
 
 public interface IDoctorService
 {
-    public Task<bool> CheckDoctorExist([FromBody] AddPrescriptionDTO addPrescriptionDto);
+    public void CheckDoctorExist([FromBody] AddPrescriptionDTO addPrescriptionDto);
 
 }

@@ -2,22 +2,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using solution.DTOs;
 using solution.Exception;
+using solution.RepositoryInterfaces;
 
 namespace solution.Repository;
 
 public class DoctorRepository : IDoctorRepository
 {
-    public readonly AppDbContext _appDbContext;
+    public readonly AppDbContext AppDbContext;
 
     public DoctorRepository(AppDbContext appDbContext)
     {
-        _appDbContext = appDbContext;
+        AppDbContext = appDbContext;
     }
     
     public async Task<bool> CheckDoctorExist([FromBody] AddPrescriptionDTO addPrescriptionDto)
     {
         var doctor =
-            await _appDbContext.Doctors.FirstOrDefaultAsync(d => d.IdDoctor == addPrescriptionDto.DoctorId);
+            await AppDbContext.Doctors.FirstOrDefaultAsync(d => d.IdDoctor == addPrescriptionDto.DoctorId);
         if (doctor == null) throw new DoctorDoesntExistsException(addPrescriptionDto.DoctorId);
         return true;
     }

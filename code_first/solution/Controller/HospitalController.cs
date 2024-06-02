@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using solution.DTOs;
 using solution.Exception;
-using solution.Interface;
 using solution.Service;
 using solution.ServiceInterfaces;
 
@@ -13,11 +12,11 @@ namespace solution.Controller;
 public class HospitalController : ControllerBase
 {
 
-    public IPrescriptionService _PrescriptionService;
-    public IDoctorService _DoctorService;
-    public IMedicamentService _MedicamentService;
-    public IPrescriptionMedicamentService _PrescriptionMedicamentService;
-    public IPatientService _PatientService;
+    private IPrescriptionService _PrescriptionService;
+    private IDoctorService _DoctorService;
+    private IMedicamentService _MedicamentService;
+    private IPrescriptionMedicamentService _PrescriptionMedicamentService;
+    private IPatientService _PatientService;
     
 
     public HospitalController(IPrescriptionService prescriptionService,
@@ -32,18 +31,21 @@ public class HospitalController : ControllerBase
         _PrescriptionMedicamentService = prescriptionMedicamentService;
         _PatientService = patientService;
     }
-    [HttpPost]
+    [HttpPost("AddPrescription")]
     public async Task<IActionResult> AddPrescription([FromBody] AddPrescriptionDTO addPrescriptionDto)
     {
         try
         {
+            
             var patientExists = await _PatientService.CheckPatientExist(addPrescriptionDto.Patient.IdPatient);
             if (patientExists!) await _PatientService.InsertNewPatient(addPrescriptionDto);
-             _MedicamentService.CheckMedicamentExists(addPrescriptionDto);
-             _MedicamentService.CheckMedicamentLowerThan10(addPrescriptionDto);
-             _PrescriptionService.CheckDueDate(addPrescriptionDto);
+            _MedicamentService.CheckMedicamentExists(addPrescriptionDto);
+            _MedicamentService.CheckMedicamentLowerThan10(addPrescriptionDto);
+            _DoctorService.CheckDoctorExist(addPrescriptionDto);
+            _PrescriptionService.CheckDueDate(addPrescriptionDto);
             var prescriptionId = await _PrescriptionService.AddPrescription(addPrescriptionDto);
-             var result = await _PrescriptionMedicamentService.CompletePrescriptionInsert(addPrescriptionDto, prescriptionId);
+            var result =
+                await _PrescriptionMedicamentService.CompletePrescriptionInsert(addPrescriptionDto, prescriptionId);
             return Ok(result);
         }
         catch (DoctorDoesntExistsException ex)
@@ -54,10 +56,19 @@ public class HospitalController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+        catch (MedicamentGreaterThan10Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (DueDateSmallerThanDateException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        
         
     }
 
-    [HttpGet]
+    [HttpGet("GetPatientInformation")]
     public async Task<IActionResult> GetPatientInformation(int patientId)
     {
 
@@ -65,7 +76,8 @@ public class HospitalController : ControllerBase
         {
             var patientExists= await _PatientService.CheckPatientExist(patientId);
             if (patientExists!) throw new PatientDoesntExistsException(patientId);
-            return Ok();
+            var patient = await _PatientService.GetPatientInformation(patientId);
+            return Ok(patient);
         }
         catch (PatientDoesntExistsException ex)
         {

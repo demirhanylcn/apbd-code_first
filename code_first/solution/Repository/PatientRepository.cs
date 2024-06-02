@@ -2,21 +2,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using solution.DTOs;
 using solution.Models;
+using solution.RepositoryInterfaces;
 
 namespace solution.Repository;
 
 public class PatientRepository : IPatientRepository
 {
-    public readonly AppDbContext _appDbContext;
+    public readonly AppDbContext AppDbContext;
 
     public PatientRepository(AppDbContext appDbContext)
     {
-        _appDbContext = appDbContext;
+        AppDbContext = appDbContext;
     }
     public async Task<bool> CheckPatientExist(int patientId)
     {
         var patient =
-            await _appDbContext.Patients.FirstOrDefaultAsync(p => p.IdPatient == patientId);
+            await AppDbContext.Patients.FirstOrDefaultAsync(p => p.IdPatient == patientId);
         if (patient == null) return false;
         return true;
     }
@@ -32,23 +33,63 @@ public class PatientRepository : IPatientRepository
                 LastName = addPrescriptionDto.Patient.LastName,
                 Prescriptions = new List<Prescription>()
             };
-        await _appDbContext.Patients.AddAsync(patient);
-        var result = await _appDbContext.SaveChangesAsync();
+        await AppDbContext.Patients.AddAsync(patient);
+        var result = await AppDbContext.SaveChangesAsync();
         return result;
     }
 
-    public async Task<PatientDTO> GetPatientInformation(int patientId)
+    public async Task<GetPatientDTO> GetPatientInformation(int patientId)
     {
-        var patient = await _appDbContext.Patients.FirstOrDefaultAsync(p => p.IdPatient == patientId);
-        var patientInformation = new PatientDTO
+        var patient = await AppDbContext.Patients
+            .Include(p => p.Prescriptions)
+            .ThenInclude(pr => pr.Prescription_Medicaments)
+            .ThenInclude(pm => pm.Medicament).ThenInclude(medicament => medicament.PrescriptionMedicaments)
+            .Include(p => p.Prescriptions)
+            .ThenInclude(pr => pr.Doctor)
+            .FirstOrDefaultAsync(p => p.IdPatient == patientId);
+        
+        var result = new GetPatientDTO
         {
-            BirthDate = patient.BirthDate,
-            FirstName = patient.FirstName,
-            LastName = patient.LastName,
-            IdPatient = patientId
+            Patient = new PatientDTO
+            {
+                IdPatient = patientId,
+                FirstName = patient.FirstName,
+                LastName = patient.LastName,
+                BirthDate = patient.BirthDate
+            },
+            Prescriptions = patient.Prescriptions.Select(pr => new PrescriptionDTO
+            {
+                PrescriptionId = pr.Id,
+                Date = pr.Date,
+                DueDate = pr.DueDate,
+            }).ToList(),
+            Medicaments = patient.Prescriptions
+                .SelectMany(pr => pr.Prescription_Medicaments)
+                .Select(pm => pm.Medicament)
+                .Select(m => new MedicamentDTO
+                {
+                    IdMedicament = m.IdMedicament,
+                    Name = m.Name,
+                    Description = m.Description,
+                    PrescriptionMedicaments = m.PrescriptionMedicaments.Select(pm => new PrescriptionMedicamentDTO
+                    {
+                        Details = pm.Details,
+                        Dose = pm.Dose
+                    }).ToList()
+                }).ToList(),
+            Doctors = patient.Prescriptions
+                .Select(pr => pr.Doctor)
+                .Distinct()
+                .Select(d => new DoctorDTO
+                {
+                    IdDoctor = d.IdDoctor,
+                    FirstName = d.FirstName,
+                    LastName = d.LastName
+                }).ToList()
         };
 
-        return patientInformation;
+        return result;
     }
+
     
 }

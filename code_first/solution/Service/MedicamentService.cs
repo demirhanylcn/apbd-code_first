@@ -1,13 +1,14 @@
 using solution.DTOs;
 using solution.Exception;
-using solution.Interface;
 using solution.Repository;
+using solution.RepositoryInterfaces;
+using solution.ServiceInterfaces;
 
 namespace solution.Service;
 
 public class MedicamentService : IMedicamentService
 {
-    public IMedicamentRepository _MedicamentRepository;
+    public readonly IMedicamentRepository _MedicamentRepository;
 
     public MedicamentService(IMedicamentRepository medicamentRepository)
     {
@@ -24,7 +25,7 @@ public class MedicamentService : IMedicamentService
 
     public void CheckMedicamentLowerThan10(AddPrescriptionDTO addPrescriptionDto)
     {
-        var result = addPrescriptionDto.Medicaments.Count <= 10;
+        var result = addPrescriptionDto.Medicaments.Count >= 10;
         if (result!) throw new MedicamentGreaterThan10Exception();
     }
 

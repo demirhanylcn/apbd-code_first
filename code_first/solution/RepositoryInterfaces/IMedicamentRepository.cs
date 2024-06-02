@@ -1,4 +1,4 @@
-namespace solution.Repository;
+namespace solution.RepositoryInterfaces;
 
 public interface IMedicamentRepository
 {

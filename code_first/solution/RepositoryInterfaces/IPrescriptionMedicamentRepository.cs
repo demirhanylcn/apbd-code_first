@@ -1,6 +1,6 @@
 using solution.DTOs;
 
-namespace solution.Repository;
+namespace solution.RepositoryInterfaces;
 
 public interface IPrescriptionMedicamentRepository
 {

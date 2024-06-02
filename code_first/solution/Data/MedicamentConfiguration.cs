@@ -12,6 +12,6 @@ public class MedicamentConfiguration : IEntityTypeConfiguration<Medicament>
         builder.Property(e => e.Name).HasMaxLength(100);
         builder.Property(e => e.Description).HasMaxLength(100);
         builder.Property(e => e.Type).HasMaxLength(100);
-        builder.HasMany(e => e.Prescription_Medicaments).WithOne(e => e.Medicament).HasForeignKey(e => e.MedicamentId);
+        builder.HasMany(e => e.PrescriptionMedicaments).WithOne(e => e.Medicament).HasForeignKey(e => e.MedicamentId);
     }
 }

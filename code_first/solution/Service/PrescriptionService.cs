@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using solution.DTOs;
 using solution.Exception;
-using solution.Repository;
 using solution.RepositoryInterfaces;
+using solution.ServiceInterfaces;
 
 namespace solution.Service;
 
 public class PrescriptionService : IPrescriptionService
 {
-    public IPrescriptionRepository _PrescriptionRepository;
+    public readonly IPrescriptionRepository _PrescriptionRepository;
 
     public PrescriptionService(IPrescriptionRepository prescriptionRepository)
     {
@@ -26,10 +26,5 @@ public class PrescriptionService : IPrescriptionService
         var date = addPrescriptionDto.PrescriptionDate;
         var result = dueDate >= date;
         if (result!) throw new DueDateSmallerThanDateException(dueDate,date);
-    }
-
-    public void CheckPrescriptionExists(List<PrescriptionDTO>? prescriptions, int patientId)
-    {
-        if (prescriptions == null || prescriptions.Count == 0) throw new PrescriptionDoesntExistsException(patientId);
-    }
+    } 
 }

@@ -6,7 +6,7 @@ namespace solution.Models;
 
 public class Prescription
 {
-    public int PrescriptionId { get; set; }
+    public int Id { get; set; }
     public DateTime Date { get; set; }
     public DateTime DueDate { get; set; }
     
@@ -16,5 +16,5 @@ public class Prescription
     public int PatientId { get; set; }
     public Patient Patient { get; set; }
 
-    public ICollection<Prescription_Medicament> Prescription_Medicaments { get; set; }
+    public ICollection<PrescriptionMedicament> Prescription_Medicaments { get; set; }
 }

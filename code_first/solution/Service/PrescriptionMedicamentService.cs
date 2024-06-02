@@ -1,13 +1,13 @@
 using solution.DTOs;
-using solution.Interface;
 using solution.Repository;
+using solution.RepositoryInterfaces;
 using solution.ServiceInterfaces;
 
 namespace solution.Service;
 
 public class PrescriptionMedicamentService : IPrescriptionMedicamentService
 {
-    public IPrescriptionMedicamentRepository _PrescriptionMedicamentRepository;
+    public readonly IPrescriptionMedicamentRepository _PrescriptionMedicamentRepository;
 
     public PrescriptionMedicamentService(IPrescriptionMedicamentRepository prescriptionMedicamentRepository)
     {

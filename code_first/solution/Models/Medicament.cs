@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 
 namespace solution.Models;
 
@@ -8,6 +7,6 @@ public class Medicament
     public string Name { get; set; }
     public string Description { get; set; }
     public string Type { get; set; }
-    public ICollection<Prescription_Medicament> Prescription_Medicaments { get; set; }
+    public ICollection<PrescriptionMedicament> PrescriptionMedicaments { get; set; }
 
 }

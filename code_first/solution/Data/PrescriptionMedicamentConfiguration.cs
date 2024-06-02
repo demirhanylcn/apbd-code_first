@@ -4,9 +4,9 @@ using solution.Models;
 
 namespace solution.Data;
 
-public class PrescriptionMedicamentConfiguration : IEntityTypeConfiguration<Prescription_Medicament>
+public class PrescriptionMedicamentConfiguration : IEntityTypeConfiguration<PrescriptionMedicament>
 {
-    public void Configure(EntityTypeBuilder<Prescription_Medicament> builder)
+    public void Configure(EntityTypeBuilder<PrescriptionMedicament> builder)
     {
         builder.HasKey(e => new { e.PrescriptionId, e.MedicamentId});
         builder.Property(e => e.Details).HasMaxLength(100);
@@ -16,7 +16,7 @@ public class PrescriptionMedicamentConfiguration : IEntityTypeConfiguration<Pres
             .HasForeignKey(e => e.PrescriptionId);
 
         builder.HasOne(e => e.Medicament)
-            .WithMany(m => m.Prescription_Medicaments)
+            .WithMany(m => m.PrescriptionMedicaments)
             .HasForeignKey(e => e.MedicamentId);
         
 

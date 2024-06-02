@@ -1,16 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using solution.DTOs;
 using solution.Models;
+using solution.RepositoryInterfaces;
 
 namespace solution.Repository;
 
 public class PrescriptionMedicamentRepository : IPrescriptionMedicamentRepository
 {
-    public readonly AppDbContext _appDbConext;
+    public readonly AppDbContext AppDbConext;
 
     public PrescriptionMedicamentRepository(AppDbContext appDbContext)
     {
-        _appDbConext = appDbContext;
+        AppDbConext = appDbContext;
     }
 
 
@@ -18,13 +19,13 @@ public class PrescriptionMedicamentRepository : IPrescriptionMedicamentRepositor
     {
 
         var medicament =
-            await _appDbConext.Medicaments.FirstOrDefaultAsync(m =>
+            await AppDbConext.Medicaments.FirstOrDefaultAsync(m =>
                 m.IdMedicament == medicamentDto.IdMedicament);
         var prescription =
-            await _appDbConext.Prescriptions
-                .FirstOrDefaultAsync(p => p.PrescriptionId == prescriptionId);
-        await _appDbConext.PrescriptionMedicaments
-            .AddAsync(new Prescription_Medicament
+            await AppDbConext.Prescriptions
+                .FirstOrDefaultAsync(p => p.Id == prescriptionId);
+        await AppDbConext.PrescriptionMedicaments
+            .AddAsync(new PrescriptionMedicament
             {
                 Details = medicamentDto.Description,
                 Medicament = medicament,
@@ -34,7 +35,7 @@ public class PrescriptionMedicamentRepository : IPrescriptionMedicamentRepositor
                 PrescriptionId = prescriptionId
             });
 
-        var result = await _appDbConext.SaveChangesAsync();
+        var result = await AppDbConext.SaveChangesAsync();
         return result;
 
     }
