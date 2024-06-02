@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using solution.DTOs;
 using solution.Interface;
 using solution.Repository;
+using solution.ServiceInterfaces;
 
 namespace solution.Service;
 
@@ -19,11 +20,19 @@ public class PatientService : IPatientService
         return result;
     }
 
-    public async Task<bool> CheckPatientExist([FromBody] AddPrescriptionDTO addPrescriptionDto)
+    public async Task<bool> CheckPatientExist(int patientId)
     {
-        var result = await _PatientRepository.CheckPatientExist(addPrescriptionDto);
+        var result = await _PatientRepository.CheckPatientExist(patientId);
         return result;
     }
+
+    public async Task<PatientDTO> GetPatientInformation(int patientId)
+    {
+       var result = await _PatientRepository.GetPatientInformation(patientId);
+       return result;
+    }
+    
+
 
 
 }

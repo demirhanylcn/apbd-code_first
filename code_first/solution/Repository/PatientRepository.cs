@@ -13,10 +13,10 @@ public class PatientRepository : IPatientRepository
     {
         _appDbContext = appDbContext;
     }
-    public async Task<bool> CheckPatientExist([FromBody] AddPrescriptionDTO addPrescriptionDto)
+    public async Task<bool> CheckPatientExist(int patientId)
     {
         var patient =
-            await _appDbContext.Patients.FirstOrDefaultAsync(p => p.IdPatient == addPrescriptionDto.Patient.IdPatient);
+            await _appDbContext.Patients.FirstOrDefaultAsync(p => p.IdPatient == patientId);
         if (patient == null) return false;
         return true;
     }
@@ -35,6 +35,20 @@ public class PatientRepository : IPatientRepository
         await _appDbContext.Patients.AddAsync(patient);
         var result = await _appDbContext.SaveChangesAsync();
         return result;
+    }
+
+    public async Task<PatientDTO> GetPatientInformation(int patientId)
+    {
+        var patient = await _appDbContext.Patients.FirstOrDefaultAsync(p => p.IdPatient == patientId);
+        var patientInformation = new PatientDTO
+        {
+            BirthDate = patient.BirthDate,
+            FirstName = patient.FirstName,
+            LastName = patient.LastName,
+            IdPatient = patientId
+        };
+
+        return patientInformation;
     }
     
 }

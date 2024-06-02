@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using solution.DTOs;
 using solution.Models;
+using solution.RepositoryInterfaces;
 
 namespace solution.Repository;
 
@@ -37,6 +38,19 @@ public class PrescriptionRepository : IPrescriptionRepository
        return prescription.PrescriptionId;
     }
 
+
+    public  List<PrescriptionDTO> GetPrescriptions(int patientId)
+    {
+        var query = _appDbContext.Prescriptions.Include(e => e.PatientId == patientId).ToList();
+        var result = query.Select(e => new PrescriptionDTO
+        {
+            Date = e.Date,
+            DueDate = e.DueDate,
+            PrescriptionId = e.PrescriptionId
+        }).ToList();
+
+        return result;
+    }
 
     
     

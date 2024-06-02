@@ -1,6 +1,7 @@
 using solution.DTOs;
 using solution.Interface;
 using solution.Repository;
+using solution.ServiceInterfaces;
 
 namespace solution.Service;
 

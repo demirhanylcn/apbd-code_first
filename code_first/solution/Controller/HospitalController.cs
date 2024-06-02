@@ -3,6 +3,7 @@ using solution.DTOs;
 using solution.Exception;
 using solution.Interface;
 using solution.Service;
+using solution.ServiceInterfaces;
 
 namespace solution.Controller;
 
@@ -32,11 +33,11 @@ public class HospitalController : ControllerBase
         _PatientService = patientService;
     }
     [HttpPost]
-    public async Task<IActionResult> getPrescription([FromBody] AddPrescriptionDTO addPrescriptionDto)
+    public async Task<IActionResult> AddPrescription([FromBody] AddPrescriptionDTO addPrescriptionDto)
     {
         try
         {
-            var patientExists = await _PatientService.CheckPatientExist(addPrescriptionDto);
+            var patientExists = await _PatientService.CheckPatientExist(addPrescriptionDto.Patient.IdPatient);
             if (patientExists!) await _PatientService.InsertNewPatient(addPrescriptionDto);
              _MedicamentService.CheckMedicamentExists(addPrescriptionDto);
              _MedicamentService.CheckMedicamentLowerThan10(addPrescriptionDto);
@@ -54,5 +55,22 @@ public class HospitalController : ControllerBase
             return BadRequest(ex.Message);
         }
         
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetPatientInformation(int patientId)
+    {
+
+        try
+        {
+            var patientExists= await _PatientService.CheckPatientExist(patientId);
+            if (patientExists!) throw new PatientDoesntExistsException(patientId);
+            return Ok();
+        }
+        catch (PatientDoesntExistsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+      
     }
 }

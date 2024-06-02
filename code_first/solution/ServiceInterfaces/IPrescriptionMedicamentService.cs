@@ -1,6 +1,6 @@
 using solution.DTOs;
 
-namespace solution.Interface;
+namespace solution.ServiceInterfaces;
 
 public interface IPrescriptionMedicamentService
 {
