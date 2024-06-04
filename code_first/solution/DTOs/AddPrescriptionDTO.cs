@@ -2,16 +2,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace solution.DTOs;
 
-public class AddPrescriptionDTO
+public class AddPrescriptionDto
 {
     
-    [Required]
-    public PatientDTO Patient { get; set; }
-
-    [Required] public List<MedicamentDTO> Medicaments { get; set; } = [];
+    
+    public int IdPatient { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public DateTime BirthDate { get; set; } 
+    public List<MedicamentDto> Medicaments { get; set; } = [];
     public DateTime PrescriptionDate { get; set; }
     public DateTime PrescriptionDueDate { get; set; }
-    [Required]
+    
     public int DoctorId { get; set; }
     
 }

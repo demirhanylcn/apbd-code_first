@@ -5,6 +5,6 @@ namespace solution.ServiceInterfaces;
 
 public interface IDoctorService
 {
-    public void CheckDoctorExist([FromBody] AddPrescriptionDTO addPrescriptionDto);
+    public void CheckDoctorExist([FromBody] AddPrescriptionDto addPrescriptionDto);
 
 }

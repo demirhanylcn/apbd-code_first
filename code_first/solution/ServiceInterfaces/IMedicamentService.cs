@@ -4,7 +4,7 @@ namespace solution.ServiceInterfaces;
 
 public interface IMedicamentService
 {
-    public void CheckMedicamentExists(AddPrescriptionDTO addPrescriptionDto);
+    public void CheckMedicamentExists(AddPrescriptionDto addPrescriptionDto);
 
-    public void CheckMedicamentLowerThan10(AddPrescriptionDTO addPrescriptionDto);
+    public void CheckMedicamentLowerThan10(AddPrescriptionDto addPrescriptionDto);
 }

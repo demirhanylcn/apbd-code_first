@@ -5,6 +5,6 @@ namespace solution.RepositoryInterfaces;
 
 public interface IDoctorRepository
 {
-    public Task<bool> CheckDoctorExist([FromBody] AddPrescriptionDTO addPrescriptionDto);
+    public Task<bool> CheckDoctorExist([FromBody] AddPrescriptionDto addPrescriptionDto);
 
 }

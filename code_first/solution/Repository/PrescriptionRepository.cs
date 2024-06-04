@@ -15,13 +15,13 @@ public class PrescriptionRepository : IPrescriptionRepository
         AppDbContext = appDbContext;
     }
 
-    public async Task<int> AddPrescription([FromBody] AddPrescriptionDTO addPrescriptionDto)
+    public async Task<int> AddPrescription([FromBody] AddPrescriptionDto addPrescriptionDto)
     {
 
         var doctor =
             await AppDbContext.Doctors.FirstOrDefaultAsync(d => d.IdDoctor == addPrescriptionDto.DoctorId);
         var patient =
-            await AppDbContext.Patients.FirstOrDefaultAsync(p => p.IdPatient == addPrescriptionDto.Patient.IdPatient);
+            await AppDbContext.Patients.FirstOrDefaultAsync(p => p.IdPatient == addPrescriptionDto.IdPatient);
         var prescription =
             new Prescription
             {
@@ -30,7 +30,7 @@ public class PrescriptionRepository : IPrescriptionRepository
                 Doctor = doctor,
                 DueDate = addPrescriptionDto.PrescriptionDueDate,
                 Patient = patient,
-                PatientId = addPrescriptionDto.Patient.IdPatient,
+                PatientId = addPrescriptionDto.IdPatient,
                 Prescription_Medicaments = new List<PrescriptionMedicament>()
             };
        await AppDbContext.Prescriptions.AddAsync(prescription);

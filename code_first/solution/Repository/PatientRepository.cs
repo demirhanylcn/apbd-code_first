@@ -22,15 +22,14 @@ public class PatientRepository : IPatientRepository
         return true;
     }
 
-    public async Task<int> InsertNewPatient([FromBody] AddPrescriptionDTO addPrescriptionDto)
+    public async Task<int> InsertNewPatient([FromBody] AddPrescriptionDto addPrescriptionDto)
     {
         var patient =
             new Patient
             {
-                BirthDate = addPrescriptionDto.Patient.BirthDate,
-                FirstName = addPrescriptionDto.Patient.FirstName,
-                IdPatient = addPrescriptionDto.Patient.IdPatient,
-                LastName = addPrescriptionDto.Patient.LastName,
+                BirthDate = addPrescriptionDto.BirthDate,
+                FirstName = addPrescriptionDto.FirstName,
+                LastName = addPrescriptionDto.LastName,
                 Prescriptions = new List<Prescription>()
             };
         await AppDbContext.Patients.AddAsync(patient);
@@ -38,7 +37,7 @@ public class PatientRepository : IPatientRepository
         return result;
     }
 
-    public async Task<GetPatientDTO> GetPatientInformation(int patientId)
+    public async Task<PatientDto> GetPatientInformation(int patientId)
     {
         var patient = await AppDbContext.Patients
             .Include(p => p.Prescriptions)
@@ -47,45 +46,31 @@ public class PatientRepository : IPatientRepository
             .Include(p => p.Prescriptions)
             .ThenInclude(pr => pr.Doctor)
             .FirstOrDefaultAsync(p => p.IdPatient == patientId);
-        
-        var result = new GetPatientDTO
+
+        var result = new PatientDto
         {
-            Patient = new PatientDTO
-            {
-                IdPatient = patientId,
-                FirstName = patient.FirstName,
-                LastName = patient.LastName,
-                BirthDate = patient.BirthDate
-            },
-            Prescriptions = patient.Prescriptions.Select(pr => new PrescriptionDTO
+            IdPatient = patientId,
+            FirstName = patient.FirstName,
+            LastName = patient.LastName,
+            BirthDate = patient.BirthDate,
+            Prescriptions = patient.Prescriptions.Select(pr => new PrescriptionDto
             {
                 PrescriptionId = pr.Id,
                 Date = pr.Date,
                 DueDate = pr.DueDate,
-            }).ToList(),
-            Medicaments = patient.Prescriptions
-                .SelectMany(pr => pr.Prescription_Medicaments)
-                .Select(pm => pm.Medicament)
-                .Select(m => new MedicamentDTO
-                {
-                    IdMedicament = m.IdMedicament,
-                    Name = m.Name,
-                    Description = m.Description,
-                    PrescriptionMedicaments = m.PrescriptionMedicaments.Select(pm => new PrescriptionMedicamentDTO
+                MedicamentDtos = pr.Prescription_Medicaments.Select(pm => pm.Medicament)
+                    .Select(m => new MedicamentDto
                     {
-                        Details = pm.Details,
-                        Dose = pm.Dose
-                    }).ToList()
-                }).ToList(),
-            Doctors = patient.Prescriptions
-                .Select(pr => pr.Doctor)
-                .Distinct()
-                .Select(d => new DoctorDTO
+                        Description = m.PrescriptionMedicaments.First(ms => ms.MedicamentId == m.IdMedicament).Details,
+                        Dose = m.PrescriptionMedicaments.First(ms => ms.MedicamentId == m.IdMedicament).Dose
+                    }).ToList(),
+                DoctorDtos = new DoctorDto
                 {
-                    IdDoctor = d.IdDoctor,
-                    FirstName = d.FirstName,
-                    LastName = d.LastName
-                }).ToList()
+                    FirstName = pr.Doctor.FirstName,
+                    LastName = pr.Doctor.LastName,
+                    IdDoctor = pr.Doctor.IdDoctor
+                }
+            }).ToList()
         };
 
         return result;

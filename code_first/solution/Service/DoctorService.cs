@@ -13,7 +13,7 @@ public class DoctorService : IDoctorService
     {
         _DoctorRepository = doctorRepository;
     }
-    public void CheckDoctorExist([FromBody] AddPrescriptionDTO addPrescriptionDto)
+    public void CheckDoctorExist([FromBody] AddPrescriptionDto addPrescriptionDto)
     {
         _DoctorRepository.CheckDoctorExist(addPrescriptionDto);
        

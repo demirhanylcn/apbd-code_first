@@ -15,7 +15,7 @@ public class DoctorRepository : IDoctorRepository
         AppDbContext = appDbContext;
     }
     
-    public async Task<bool> CheckDoctorExist([FromBody] AddPrescriptionDTO addPrescriptionDto)
+    public async Task<bool> CheckDoctorExist([FromBody] AddPrescriptionDto addPrescriptionDto)
     {
         var doctor =
             await AppDbContext.Doctors.FirstOrDefaultAsync(d => d.IdDoctor == addPrescriptionDto.DoctorId);

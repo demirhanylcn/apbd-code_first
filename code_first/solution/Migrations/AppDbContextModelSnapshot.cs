@@ -133,7 +133,7 @@ namespace solution.Migrations
                     b.ToTable("Prescriptions");
                 });
 
-            modelBuilder.Entity("solution.Models.Prescription_Medicament", b =>
+            modelBuilder.Entity("solution.Models.PrescriptionMedicament", b =>
                 {
                     b.Property<int>("PrescriptionId")
                         .HasColumnType("int");
@@ -175,10 +175,10 @@ namespace solution.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("solution.Models.Prescription_Medicament", b =>
+            modelBuilder.Entity("solution.Models.PrescriptionMedicament", b =>
                 {
                     b.HasOne("solution.Models.Medicament", "Medicament")
-                        .WithMany("Prescription_Medicaments")
+                        .WithMany("PrescriptionMedicaments")
                         .HasForeignKey("MedicamentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -201,7 +201,7 @@ namespace solution.Migrations
 
             modelBuilder.Entity("solution.Models.Medicament", b =>
                 {
-                    b.Navigation("Prescription_Medicaments");
+                    b.Navigation("PrescriptionMedicaments");
                 });
 
             modelBuilder.Entity("solution.Models.Patient", b =>

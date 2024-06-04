@@ -5,5 +5,5 @@ namespace solution.RepositoryInterfaces;
 
 public interface IPrescriptionRepository
 {
-    public Task<int> AddPrescription([FromBody] AddPrescriptionDTO addPrescriptionDto);
+    public Task<int> AddPrescription([FromBody] AddPrescriptionDto addPrescriptionDto);
 }

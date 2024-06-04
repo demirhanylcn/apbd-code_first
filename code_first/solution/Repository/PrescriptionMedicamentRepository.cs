@@ -15,7 +15,7 @@ public class PrescriptionMedicamentRepository : IPrescriptionMedicamentRepositor
     }
 
 
-    public async Task<int> CompletePrescriptionInsert(MedicamentDTO medicamentDto, int prescriptionId)
+    public async Task<int> CompletePrescriptionInsert(MedicamentDto medicamentDto, int prescriptionId)
     {
 
         var medicament =
@@ -28,10 +28,8 @@ public class PrescriptionMedicamentRepository : IPrescriptionMedicamentRepositor
             .AddAsync(new PrescriptionMedicament
             {
                 Details = medicamentDto.Description,
-                Medicament = medicament,
                 Dose = medicamentDto.Dose,
                 MedicamentId = medicamentDto.IdMedicament,
-                Prescription = prescription,
                 PrescriptionId = prescriptionId
             });
 

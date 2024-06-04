@@ -8,7 +8,7 @@ namespace solution.Controller;
 
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/")]
 public class HospitalController : ControllerBase
 {
 
@@ -31,14 +31,15 @@ public class HospitalController : ControllerBase
         _PrescriptionMedicamentService = prescriptionMedicamentService;
         _PatientService = patientService;
     }
+
+    
     [HttpPost("AddPrescription")]
-    public async Task<IActionResult> AddPrescription([FromBody] AddPrescriptionDTO addPrescriptionDto)
+    public async Task<IActionResult> AddPrescription([FromBody] AddPrescriptionDto addPrescriptionDto)
     {
         try
         {
-            
-            var patientExists = await _PatientService.CheckPatientExist(addPrescriptionDto.Patient.IdPatient);
-            if (patientExists!) await _PatientService.InsertNewPatient(addPrescriptionDto);
+            var patientExists = await _PatientService.CheckPatientExist(addPrescriptionDto.IdPatient);
+            if (!patientExists) await _PatientService.InsertNewPatient(addPrescriptionDto);
             _MedicamentService.CheckMedicamentExists(addPrescriptionDto);
             _MedicamentService.CheckMedicamentLowerThan10(addPrescriptionDto);
             _DoctorService.CheckDoctorExist(addPrescriptionDto);
@@ -68,14 +69,14 @@ public class HospitalController : ControllerBase
         
     }
 
-    [HttpGet("GetPatientInformation")]
+    [HttpGet("GetPatientInformation/{patientId:int}")]
     public async Task<IActionResult> GetPatientInformation(int patientId)
     {
 
         try
         {
             var patientExists= await _PatientService.CheckPatientExist(patientId);
-            if (patientExists!) throw new PatientDoesntExistsException(patientId);
+            if (!patientExists) throw new PatientDoesntExistsException(patientId);
             var patient = await _PatientService.GetPatientInformation(patientId);
             return Ok(patient);
         }

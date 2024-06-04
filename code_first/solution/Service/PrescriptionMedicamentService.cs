@@ -14,7 +14,7 @@ public class PrescriptionMedicamentService : IPrescriptionMedicamentService
         _PrescriptionMedicamentRepository = prescriptionMedicamentRepository;
     }
 
-    public async Task<int> CompletePrescriptionInsert(AddPrescriptionDTO addPrescriptionDto, int prescriptionId)
+    public async Task<int> CompletePrescriptionInsert(AddPrescriptionDto addPrescriptionDto, int prescriptionId)
     {
         var result = 0;
         foreach (var each in addPrescriptionDto.Medicaments)

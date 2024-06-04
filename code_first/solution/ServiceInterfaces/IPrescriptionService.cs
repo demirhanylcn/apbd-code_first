@@ -5,8 +5,8 @@ namespace solution.ServiceInterfaces;
 
 public interface IPrescriptionService
 {
-    public Task<int> AddPrescription([FromBody] AddPrescriptionDTO addPrescriptionDto);
-    public void CheckDueDate([FromBody] AddPrescriptionDTO addPrescriptionDto);
+    public Task<int> AddPrescription([FromBody] AddPrescriptionDto addPrescriptionDto);
+    public void CheckDueDate([FromBody] AddPrescriptionDto addPrescriptionDto);
 
 
 }

@@ -12,8 +12,8 @@ using solution;
 namespace solution.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240601173618_Initial")]
-    partial class Initial
+    [Migration("20240604184233_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -136,7 +136,7 @@ namespace solution.Migrations
                     b.ToTable("Prescriptions");
                 });
 
-            modelBuilder.Entity("solution.Models.Prescription_Medicament", b =>
+            modelBuilder.Entity("solution.Models.PrescriptionMedicament", b =>
                 {
                     b.Property<int>("PrescriptionId")
                         .HasColumnType("int");
@@ -178,10 +178,10 @@ namespace solution.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("solution.Models.Prescription_Medicament", b =>
+            modelBuilder.Entity("solution.Models.PrescriptionMedicament", b =>
                 {
                     b.HasOne("solution.Models.Medicament", "Medicament")
-                        .WithMany("Prescription_Medicaments")
+                        .WithMany("PrescriptionMedicaments")
                         .HasForeignKey("MedicamentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -204,7 +204,7 @@ namespace solution.Migrations
 
             modelBuilder.Entity("solution.Models.Medicament", b =>
                 {
-                    b.Navigation("Prescription_Medicaments");
+                    b.Navigation("PrescriptionMedicaments");
                 });
 
             modelBuilder.Entity("solution.Models.Patient", b =>

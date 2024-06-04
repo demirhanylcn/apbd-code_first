@@ -1,6 +1,6 @@
-namespace solution.DTOs;
+﻿namespace solution.DTOs;
 
-public class PrescriptionMedicamentDTO
+public class PrescriptionMedicamentDto
 {
     public int Dose { get; set; }
     public string Details { get; set; }

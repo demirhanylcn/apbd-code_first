@@ -15,7 +15,7 @@ public class MedicamentService : IMedicamentService
         _MedicamentRepository = medicamentRepository;
     }
 
-    public async void CheckMedicamentExists(AddPrescriptionDTO addPrescriptionDto)
+    public async void CheckMedicamentExists(AddPrescriptionDto addPrescriptionDto)
     {
         foreach (var medicament in addPrescriptionDto.Medicaments)
         {
@@ -23,7 +23,7 @@ public class MedicamentService : IMedicamentService
         }
     }
 
-    public void CheckMedicamentLowerThan10(AddPrescriptionDTO addPrescriptionDto)
+    public void CheckMedicamentLowerThan10(AddPrescriptionDto addPrescriptionDto)
     {
         var result = addPrescriptionDto.Medicaments.Count >= 10;
         if (result!) throw new MedicamentGreaterThan10Exception();

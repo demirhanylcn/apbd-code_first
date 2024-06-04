@@ -14,7 +14,7 @@ public class PatientService : IPatientService
     {
         _PatientRepository = patientRepository;
     }
-    public async Task<int> InsertNewPatient([FromBody] AddPrescriptionDTO addPrescriptionDto)
+    public async Task<int> InsertNewPatient([FromBody] AddPrescriptionDto addPrescriptionDto)
     {
         var result = await _PatientRepository.InsertNewPatient(addPrescriptionDto);
         return result;
@@ -26,7 +26,7 @@ public class PatientService : IPatientService
         return result;
     }
 
-    public async Task<GetPatientDTO> GetPatientInformation(int patientId)
+    public async Task<PatientDto> GetPatientInformation(int patientId)
     {
        var result = await _PatientRepository.GetPatientInformation(patientId);
        return result;

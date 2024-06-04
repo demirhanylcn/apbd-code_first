@@ -14,13 +14,13 @@ public class PrescriptionService : IPrescriptionService
     {
         _PrescriptionRepository = prescriptionRepository;
     }
-    public async Task<int> AddPrescription([FromBody] AddPrescriptionDTO addPrescriptionDto)
+    public async Task<int> AddPrescription([FromBody] AddPrescriptionDto addPrescriptionDto)
     {
         var result = await _PrescriptionRepository.AddPrescription(addPrescriptionDto);
         return result;
     }
 
-    public void CheckDueDate([FromBody] AddPrescriptionDTO addPrescriptionDto)
+    public void CheckDueDate([FromBody] AddPrescriptionDto addPrescriptionDto)
     {
         var dueDate = addPrescriptionDto.PrescriptionDueDate;
         var date = addPrescriptionDto.PrescriptionDate;
